@@ -45,7 +45,6 @@ public class MinigameManager : MonoBehaviour
     {
         currentMinigame = minigames[currentIndex];
         currentMinigame.Init();
-        currentMinigame.gameObject.SetActive(true);
         waitingForMinigameResult = true;
     }
 
@@ -66,13 +65,12 @@ public class MinigameManager : MonoBehaviour
             currentIndex = 0;
         }
 
-        currentMinigame.gameObject.SetActive(false);
-        currentMinigame.Clear();
+        currentMinigame.Clear(); // Clear directly when minigame end? 
+        /// <see cref="Minigame.CompleteMinigame(bool)"/>
 
         currentMinigame = minigames[currentIndex];
 
         currentMinigame.Init();
-        currentMinigame.gameObject.SetActive(true);
         waitingForMinigameResult = true;
     }
 

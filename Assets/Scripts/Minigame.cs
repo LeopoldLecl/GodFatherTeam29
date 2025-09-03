@@ -10,12 +10,14 @@ public class Minigame : MonoBehaviour
     public virtual void Init()
     {
         // Init minigame
+        gameObject.SetActive(true);
         isGameActive = true;
     }
 
     public virtual void Clear()
     {
         // Clear and stop minigame
+        gameObject.SetActive(false);
         isGameActive = false;
     }
 
