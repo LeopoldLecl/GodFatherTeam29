@@ -51,6 +51,8 @@ public class Minigame_Bail : Minigame
         currentDirection = Direction.RIGHT;
         ActivateIcon(currentDirection);
         actualCountdownTime = maxCountdownTime;
+        pointSlider.value = 0;
+        timeSlider.value = 1;
     }
 
     private void Update()
