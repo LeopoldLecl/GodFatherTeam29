@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 enum Direction
 {
@@ -8,16 +9,27 @@ enum Direction
     RIGHT = 1
 }
 
-public class BailMinigame : Minigame
+public class Minigame_Bail : Minigame
 {
     [SerializeField]
     InputActionReference IAClick;
 
     [SerializeField]
     GameObject leftIcon;
-
     [SerializeField]
     GameObject rightIcon;
+    [SerializeField]
+    Slider timeSlider;
+    [SerializeField]
+    Slider pointSlider;
+
+    [SerializeField]
+    int pressToWin = 10;
+    int actualPress;
+
+    [SerializeField]
+    float maxCountdownTime = 5f;
+    float actualCountdownTime;
 
     public static event Action onGoodKeyPressed;
 
@@ -38,6 +50,26 @@ public class BailMinigame : Minigame
         onGoodKeyPressed += OnGoodKeyPressed;
         currentDirection = Direction.RIGHT;
         ActivateIcon(currentDirection);
+        actualCountdownTime = maxCountdownTime;
+    }
+
+    private void Update()
+    {
+        if (isGameActive)
+        {
+            UpdateTimer();
+        }
+    }
+
+    private void UpdateTimer()
+    {
+        actualCountdownTime -= Time.deltaTime;
+        timeSlider.value = actualCountdownTime / maxCountdownTime;
+        if (actualCountdownTime <= 0)
+        {
+            Debug.Log("win");
+            CompleteMinigame(false);
+        }
     }
 
     private void UpdateSpam(InputAction.CallbackContext ctx)
@@ -76,7 +108,13 @@ public class BailMinigame : Minigame
 
     private void OnGoodKeyPressed()
     {
-        // do something
+        actualPress++;
+        pointSlider.value = (float)actualPress / (float)pressToWin;
+        if (actualPress >= pressToWin)
+        {
+            Debug.Log("gg");
+            CompleteMinigame(true);
+        }
     }
 
     public override void Clear()
