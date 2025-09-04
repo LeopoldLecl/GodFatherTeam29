@@ -1,7 +1,9 @@
+using DG.Tweening;
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class HealthWidget : MonoBehaviour
 {
@@ -11,13 +13,38 @@ public class HealthWidget : MonoBehaviour
     [SerializeField]
     Vector3 finalPosition;
 
+    [SerializeField]
+    GameObject pivot;
+
     void Start()
     {
         Health.OnHealthUpdated += UpdateOverlayPosition;
+
+        Sequence yTransformSequence = DOTween.Sequence();
+        yTransformSequence
+            .Append(transform.DOLocalMoveY(1f, 1f).SetEase(Ease.InOutSine))
+            .Append(transform.DOLocalMoveY(-1f, 1f).SetEase(Ease.InOutSine))
+            .SetLoops(-1);
+
+        Sequence xTransformSequence = DOTween.Sequence();
+        xTransformSequence
+            .Append(transform.DOLocalMoveX(0.5f, 1f).SetEase(Ease.InOutSine))
+            .Append(transform.DOLocalMoveX(-0.5f, 1f).SetEase(Ease.InOutSine))
+            .SetLoops(-1);
+
+        Sequence rotateSequence = DOTween.Sequence();
+        rotateSequence
+            .Append(transform.DORotate(new Vector3(0, 0, 3), 1f).SetEase(Ease.InOutSine))
+            .Append(transform.DORotate(new Vector3(0, 0, -3), 1f).SetEase(Ease.InOutSine))
+            .SetLoops(-1);
+
+        yTransformSequence.Play();
+        xTransformSequence.Play();
+        rotateSequence.Play();
     }
 
     private void UpdateOverlayPosition(int currentHealth, int maxHealth)
     {
-        gameObject.transform.position = Vector3.Lerp(finalPosition, basePosition, (float)currentHealth / maxHealth);
+        pivot.transform.DOLocalMove(Vector3.Lerp(finalPosition, basePosition, (float)currentHealth / maxHealth), 1f);
     }
 }

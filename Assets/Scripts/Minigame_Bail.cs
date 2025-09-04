@@ -44,6 +44,7 @@ public class Minigame_Bail : Minigame
         onGoodKeyPressed += OnGoodKeyPressed;
         currentDirection = Direction.RIGHT;
         ActivateIcon(currentDirection);
+        actualPress = 0;
         actualCountdownTime = maxCountdownTime;
         pointSlider.value = 0;
         timeSlider.value = 1;
