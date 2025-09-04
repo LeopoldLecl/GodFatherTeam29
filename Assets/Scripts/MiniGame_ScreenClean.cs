@@ -23,90 +23,118 @@ public class MiniGame_ScreenClean : Minigame
     [SerializeField] private float flashIntensity = 2f;
 
     private float timer;
-    private int currentClicks = 0;
-    private bool hasCompleted = false;
-    private Vector3 originalScale;
-    private Vector3 originalPosition;
-    private Color originalColor;
+    private int currentClicks;
+    private bool hasCompleted;
+
+    private Vector3 imgOrigScale;
+    private Quaternion imgOrigRotation;
+    private Color imgOrigColor = Color.white;
     private Image targetImageComponent;
+
     private RectTransform canvasRect;
+    private Vector3 canvasOrigLocalPos;
+
+    private Color timerOrigColor = Color.white;
+    private Vector3 timerOrigScale = Vector3.one;
 
     public override void Init()
     {
         base.Init();
 
-        timer = timeLimit;
-        currentClicks = 0;
-        hasCompleted = false;
+        if (canvasRect == null)
+        {
+            var canvas = GetComponentInParent<Canvas>();
+            canvasRect = canvas ? canvas.GetComponent<RectTransform>() : null;
+            if (canvasRect != null) canvasOrigLocalPos = canvasRect.localPosition;
+        }
 
         if (targetImage != null)
         {
-            originalScale = targetImage.transform.localScale;
-            originalPosition = targetImage.transform.localPosition;
             targetImageComponent = targetImage.GetComponent<Image>();
-            if (targetImageComponent != null)
-                originalColor = targetImageComponent.color;
+            imgOrigScale = targetImage.transform.localScale;
+            imgOrigRotation = targetImage.transform.localRotation;
+            if (targetImageComponent != null) imgOrigColor = targetImageComponent.color;
+
+            targetImage.onClick.RemoveListener(OnImageClicked);
+            targetImage.onClick.AddListener(OnImageClicked);
         }
 
-        canvasRect = GetComponentInParent<Canvas>()?.GetComponent<RectTransform>();
+        if (timerText != null)
+        {
+            timerOrigColor = timerText.color;
+            timerOrigScale = timerText.transform.localScale;
+        }
 
-        SetupUI();
+        ResetGameplayState();
+        ResetVisuals();
 
+        UpdateUI();
         StartCoroutine(AppearanceEffect());
-
     }
 
     public override void Clear()
     {
-        base.Clear();
-
-        if (targetImage != null)
-        {
-            targetImage.interactable = false;
-            targetImage.onClick.RemoveListener(OnImageClicked); 
-        }
-
         StopAllCoroutines();
-    }
 
-    private void SetupUI()
-    {
         if (targetImage != null)
         {
-            targetImage.interactable = true;
-
             targetImage.onClick.RemoveListener(OnImageClicked);
-            targetImage.onClick.AddListener(OnImageClicked);
-
-            targetImage.gameObject.SetActive(true);
-            targetImage.transform.localScale = originalScale;
-
-            if (targetImageComponent != null)
-                targetImageComponent.color = originalColor;
+            targetImage.interactable = false;
         }
 
-        UpdateUI();
+        ResetVisuals();
+
+        base.Clear();
     }
 
-    void Update()
+    private void ResetGameplayState()
+    {
+        timer = timeLimit;
+        currentClicks = 0;
+        hasCompleted = false;
+    }
+
+    private void ResetVisuals()
+    {
+        if (canvasRect != null)
+            canvasRect.localPosition = canvasOrigLocalPos;
+
+        if (targetImage != null)
+        {
+            targetImage.gameObject.SetActive(true);
+            targetImage.interactable = true;
+            targetImage.transform.localScale = imgOrigScale;
+            targetImage.transform.localRotation = imgOrigRotation;
+            if (targetImageComponent != null)
+            {
+                var c = imgOrigColor;
+                c.a = 1f;
+                targetImageComponent.color = c;
+            }
+        }
+
+        if (timerText != null)
+        {
+            timerText.color = timerOrigColor;
+            timerText.transform.localScale = timerOrigScale;
+        }
+    }
+
+    private void Update()
     {
         if (!isGameActive || hasCompleted) return;
 
         timer -= Time.deltaTime;
-
         UpdateUI();
 
-        if (timer <= 3f && timer > 0)
+        if (timer <= 3f && timer > 0f && timerText != null)
         {
-            float intensity = Mathf.PingPong(Time.time * 8f, 1f);
-            if (timerText != null)
-            {
-                timerText.color = Color.Lerp(Color.white, Color.red, intensity);
-                timerText.transform.localScale = Vector3.one * (1f + intensity * 0.1f);
-            }
+            float t = Mathf.PingPong(Time.unscaledTime * 8f, 1f);
+            timerText.color = Color.Lerp(timerOrigColor, Color.red, t);
+            timerText.transform.localScale = Vector3.Lerp(timerOrigScale, timerOrigScale * 1.1f, t);
         }
 
-        if (timer <= 0)
+        if (timer <= 0f)
         {
             hasCompleted = true;
             StartCoroutine(FailureEffect());
@@ -116,20 +144,14 @@ public class MiniGame_ScreenClean : Minigame
     private void UpdateUI()
     {
         if (timerText != null)
-        {
-            timerText.text = $"Temps: {timer:F1}s";
-        }
+            timerText.text = $"Temps: {Mathf.Max(0f, timer):F1}s";
     }
 
     private void OnImageClicked()
     {
-        if (!isGameActive || hasCompleted)
-        {
-            return;
-        }
+        if (!isGameActive || hasCompleted) return;
 
         currentClicks++;
-
         StartCoroutine(ClickEffects());
 
         if (currentClicks >= requiredClicks)
@@ -142,17 +164,11 @@ public class MiniGame_ScreenClean : Minigame
     private IEnumerator ClickEffects()
     {
         PlayRandomClickSound();
-
         SpawnClickParticles();
-
         StartCoroutine(PunchScale());
-
         StartCoroutine(ColorFlash());
-
         StartCoroutine(ScreenShake());
-
         StartCoroutine(RotationWobble());
-
         yield return null;
     }
 
@@ -166,18 +182,17 @@ public class MiniGame_ScreenClean : Minigame
 
         while (elapsed < duration)
         {
-            float normalizedTime = elapsed / duration;
-            float scaleMultiplier = 1f + (punchCurve.Evaluate(normalizedTime) * (punchStrength - 1f));
-
-            float progressiveScale = 1f - ((float)currentClicks / requiredClicks * 0.8f);
-            targetImage.transform.localScale = originalScale * progressiveScale * scaleMultiplier;
+            float t = elapsed / duration;
+            float scaleMul = 1f + (punchCurve.Evaluate(t) * (punchStrength - 1f));
+            float progressive = 1f - ((float)currentClicks / requiredClicks * 0.8f);
+            targetImage.transform.localScale = imgOrigScale * progressive * scaleMul;
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         float finalScale = 1f - ((float)currentClicks / requiredClicks * 0.8f);
-        targetImage.transform.localScale = originalScale * finalScale;
+        targetImage.transform.localScale = imgOrigScale * finalScale;
     }
 
     private IEnumerator ColorFlash()
@@ -187,25 +202,23 @@ public class MiniGame_ScreenClean : Minigame
         Color flashColor = clickColors[Random.Range(0, clickColors.Length)];
         Color startColor = targetImageComponent.color;
 
-        float duration = 0.1f;
+        float upDur = 0.1f;
+        float downDur = 0.2f;
         float elapsed = 0f;
 
-        while (elapsed < duration)
+        while (elapsed < upDur)
         {
-            float t = elapsed / duration;
+            float t = elapsed / upDur;
             targetImageComponent.color = Color.Lerp(startColor, flashColor * flashIntensity, t);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         elapsed = 0f;
-        duration = 0.2f;
-        Color targetColor = originalColor;
-        targetColor.a = 1f - ((float)currentClicks / requiredClicks * 0.7f);
-
-        while (elapsed < duration)
+        Color targetColor = imgOrigColor; targetColor.a = 1f - ((float)currentClicks / requiredClicks * 0.7f);
+        while (elapsed < downDur)
         {
-            float t = elapsed / duration;
+            float t = elapsed / downDur;
             targetImageComponent.color = Color.Lerp(flashColor * flashIntensity, targetColor, t);
             elapsed += Time.deltaTime;
             yield return null;
@@ -218,7 +231,7 @@ public class MiniGame_ScreenClean : Minigame
     {
         if (canvasRect == null) yield break;
 
-        Vector3 originalPos = canvasRect.localPosition;
+        Vector3 start = canvasRect.localPosition;
         float intensity = maxShakeIntensity * (1f - (float)currentClicks / requiredClicks * 0.7f);
         float duration = 0.15f;
         float elapsed = 0f;
@@ -227,15 +240,13 @@ public class MiniGame_ScreenClean : Minigame
         {
             float x = Random.Range(-intensity, intensity);
             float y = Random.Range(-intensity, intensity);
-
-            canvasRect.localPosition = originalPos + new Vector3(x, y, 0);
-
+            canvasRect.localPosition = start + new Vector3(x, y, 0);
             elapsed += Time.deltaTime;
-            intensity *= 0.96f; 
+            intensity *= 0.96f;
             yield return null;
         }
 
-        canvasRect.localPosition = originalPos;
+        canvasRect.localPosition = start;
     }
 
     private IEnumerator RotationWobble()
@@ -245,19 +256,18 @@ public class MiniGame_ScreenClean : Minigame
         float wobbleAngle = Random.Range(-15f, 15f);
         float duration = 0.2f;
         float elapsed = 0f;
-        Quaternion originalRotation = targetImage.transform.localRotation;
+        Quaternion startRot = targetImage.transform.localRotation;
 
         while (elapsed < duration)
         {
             float t = elapsed / duration;
             float angle = wobbleAngle * Mathf.Sin(t * Mathf.PI);
-            targetImage.transform.localRotation = originalRotation * Quaternion.Euler(0, 0, angle);
-
+            targetImage.transform.localRotation = startRot * Quaternion.Euler(0, 0, angle);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        targetImage.transform.localRotation = originalRotation;
+        targetImage.transform.localRotation = startRot;
     }
 
     private void SpawnClickParticles()
@@ -268,8 +278,7 @@ public class MiniGame_ScreenClean : Minigame
             clickParticles.gameObject.SetActive(true);
 
         var emission = clickParticles.emission;
-        if (!emission.enabled)
-            emission.enabled = true;
+        if (!emission.enabled) emission.enabled = true;
 
         var main = clickParticles.main;
         if (main.startLifetime.constantMax <= 0f) main.startLifetime = 0.6f;
@@ -280,7 +289,7 @@ public class MiniGame_ScreenClean : Minigame
         if (clickColors != null && clickColors.Length > 0)
             main.startColor = clickColors[Random.Range(0, clickColors.Length)];
 
-        Vector3 worldPos = targetImage.transform.position; 
+        Vector3 worldPos = targetImage.transform.position;
         var canvas = targetImage.GetComponentInParent<Canvas>();
         var rect = targetImage.transform as RectTransform;
 
@@ -301,28 +310,17 @@ public class MiniGame_ScreenClean : Minigame
                 if (cam != null)
                 {
                     Vector3 sp = Input.mousePosition;
-                    sp.z = 1f; 
+                    sp.z = 1f;
                     worldPos = cam.ScreenToWorldPoint(sp);
                 }
             }
-            else 
+            else
             {
                 worldPos = rect.position;
             }
         }
-        else
-        {
-            Camera cam = Camera.main;
-            if (cam != null)
-            {
-                Vector3 sp = Input.mousePosition;
-                sp.z = 1f;
-                worldPos = cam.ScreenToWorldPoint(sp);
-            }
-        }
 
         clickParticles.transform.position = worldPos;
-
         clickParticles.Emit(15);
     }
 
@@ -349,13 +347,12 @@ public class MiniGame_ScreenClean : Minigame
         {
             float t = elapsed / duration;
             float easeOut = 1f - Mathf.Pow(1f - t, 3f);
-            targetImage.transform.localScale = originalScale * easeOut;
-
+            targetImage.transform.localScale = imgOrigScale * easeOut;
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        targetImage.transform.localScale = originalScale;
+        targetImage.transform.localScale = imgOrigScale;
     }
 
     private IEnumerator SuccessEffect()
@@ -374,9 +371,7 @@ public class MiniGame_ScreenClean : Minigame
             var main = clickParticles.main;
             main.startColor = Color.yellow;
             var emission = clickParticles.emission;
-            emission.SetBursts(new ParticleSystem.Burst[] {
-                new ParticleSystem.Burst(0.0f, 50)
-            });
+            emission.SetBursts(new ParticleSystem.Burst[] { new ParticleSystem.Burst(0.0f, 50) });
             clickParticles.Play();
         }
 
@@ -386,12 +381,9 @@ public class MiniGame_ScreenClean : Minigame
         while (elapsed < duration)
         {
             float t = elapsed / duration;
-
             float scale = 1f + Mathf.Sin(t * Mathf.PI) * 0.5f;
-            targetImage.transform.localScale = originalScale * scale * (1f - t);
-
-            
-            targetImage.transform.localRotation = Quaternion.Euler(0, 0, t * 360f * 2f);
+            targetImage.transform.localScale = imgOrigScale * scale * (1f - t);
+            targetImage.transform.localRotation = Quaternion.Euler(0, 0, t * 720f);
 
             if (targetImageComponent != null)
             {
@@ -418,12 +410,11 @@ public class MiniGame_ScreenClean : Minigame
         while (elapsed < duration)
         {
             float t = elapsed / duration;
-
-            targetImage.transform.localScale = originalScale * (1f - t);
+            targetImage.transform.localScale = imgOrigScale * (1f - t);
 
             if (targetImageComponent != null)
             {
-                Color color = Color.Lerp(originalColor, Color.black, t);
+                Color color = Color.Lerp(imgOrigColor, Color.black, t);
                 color.a = 1f - t;
                 targetImageComponent.color = color;
             }
@@ -435,11 +426,9 @@ public class MiniGame_ScreenClean : Minigame
         CompleteMinigame(false);
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         if (targetImage != null)
-        {
             targetImage.onClick.RemoveListener(OnImageClicked);
-        }
     }
 }

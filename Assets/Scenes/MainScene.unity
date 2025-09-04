@@ -353,10 +353,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: {fileID: 2124656041}
   minigames:
-  - {fileID: 881381951}
   - {fileID: 898159551}
+  - {fileID: 881381951}
   - {fileID: 1590196469}
-  IANextMinigame: {fileID: 3001919216989983466, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   gameTimer: 300
 --- !u!4 &1245438310
 Transform:
