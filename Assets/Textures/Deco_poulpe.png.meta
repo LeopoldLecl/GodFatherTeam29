@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Deco_poulpe_0: 219680489878623776
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
