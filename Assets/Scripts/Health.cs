@@ -3,37 +3,50 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField]
-    int maxHealth = 3;
+    [SerializeField] private int maxHealth = 3;
+    private int health;
 
-    [SerializeField, Tooltip("Read only")]
-    int health = 3;
-
-    public static event Action<int, int> OnHealthUpdated;
+    // Unifie l'événement pour être compatible avec ScoreManager et GameManager
+    public static event Action<int> OnHealthUpdated;
 
     void Start()
     {
-        SetHealth(maxHealth);
+        ResetHealth();
         MinigameManager.OnMinigameEnded += OnMinigameEnded;
     }
 
-    void OnMinigameEnded(bool success)
+    void OnDestroy()
+    {
+        MinigameManager.OnMinigameEnded -= OnMinigameEnded;
+    }
+
+    private void OnMinigameEnded(bool success)
     {
         if (!success)
         {
-            SetHealth(--health);
-            if (health == 0)
-            {
-                Debug.Log("Game ended");
-            }
-            return;
+            TakeDamage(1);
         }
+    }
+
+    public void TakeDamage(int amount)
+    {
+        SetHealth(health - amount);
     }
 
     public void SetHealth(int newHealth)
     {
-        health = newHealth;
-        OnHealthUpdated?.Invoke(health, maxHealth);
+        health = Mathf.Clamp(newHealth, 0, maxHealth);
+        OnHealthUpdated?.Invoke(health);
+
+        if (health <= 0)
+        {
+            Debug.Log("Santé épuisée -> Fin du jeu");
+        }
+    }
+
+    public void ResetHealth()
+    {
+        SetHealth(maxHealth);
     }
 
     public bool IsGameRunning() => health > 0;

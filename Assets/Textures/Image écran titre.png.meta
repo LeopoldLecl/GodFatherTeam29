@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1cdf6b19cdbbbda44874d99d32e2cca4
+guid: ddf1ee8f526590b42bedda7f422a2d7d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 219680489878623776
-    second: Deco_poulpe_0
+      213: 5402572060125687116
+    second: Gemini_Generated_Image_gyh07cgyh07cgyh0 (1)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Deco_poulpe_0
+      name: Gemini_Generated_Image_gyh07cgyh07cgyh0 (1)_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1184
-        height: 1053
+        width: 2045
+        height: 1694
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0269c4bdd367c0300800000000000000
-      internalID: 219680489878623776
+      spriteID: c4ded352aaac9fa40800000000000000
+      internalID: 5402572060125687116
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Deco_poulpe_0: 219680489878623776
+      Gemini_Generated_Image_gyh07cgyh07cgyh0 (1)_0: 5402572060125687116
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

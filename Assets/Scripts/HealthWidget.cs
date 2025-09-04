@@ -1,23 +1,26 @@
-using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthWidget : MonoBehaviour
 {
-    [SerializeField]
-    Vector3 basePosition;
+    [SerializeField] private Vector3 basePosition;
+    [SerializeField] private Vector3 finalPosition;
+    [SerializeField] private int maxHealth = 3;
 
-    [SerializeField]
-    Vector3 finalPosition;
-
-    void Start()
+    void OnEnable()
     {
         Health.OnHealthUpdated += UpdateOverlayPosition;
+        UpdateOverlayPosition(maxHealth);
     }
 
-    private void UpdateOverlayPosition(int currentHealth, int maxHealth)
+    void OnDisable()
     {
-        gameObject.transform.position = Vector3.Lerp(finalPosition, basePosition, (float)currentHealth / maxHealth);
+        Health.OnHealthUpdated -= UpdateOverlayPosition;
+    }
+
+    private void UpdateOverlayPosition(int currentHealth)
+    {
+        float t = maxHealth > 0 ? Mathf.Clamp01((float)currentHealth / maxHealth) : 0f;
+        transform.position = Vector3.Lerp(finalPosition, basePosition, t);
     }
 }
