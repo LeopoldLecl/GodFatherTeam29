@@ -11,7 +11,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bestScoreText;
 
     [Header("Menu Settings")]
-    [SerializeField] private string gameSceneName = "GameScene";
+    [SerializeField] private string gameSceneName = "MainScene";
 
     void Start()
     {
@@ -51,7 +51,6 @@ public class MenuManager : MonoBehaviour
     {
         Debug.Log("Démarrage du jeu...");
 
-        // Utiliser le GameManager si disponible, sinon charger directement
         if (GameManager.Instance != null)
         {
             GameManager.Instance.StartGame();
@@ -66,7 +65,6 @@ public class MenuManager : MonoBehaviour
     {
         Debug.Log("Fermeture du jeu...");
 
-        // Utiliser le GameManager si disponible, sinon quitter directement
         if (GameManager.Instance != null)
         {
             GameManager.Instance.QuitGame();
@@ -94,7 +92,6 @@ public class MenuManager : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = elapsed / duration;
-            // Ease out back curve
             t = 1f - Mathf.Pow(1f - t, 3f);
 
             target.transform.localScale = Vector3.Lerp(startScale, targetScale, t);
@@ -106,7 +103,6 @@ public class MenuManager : MonoBehaviour
 
     void OnDestroy()
     {
-        // Nettoyer les événements
         if (playButton != null)
             playButton.onClick.RemoveListener(OnPlayClicked);
 

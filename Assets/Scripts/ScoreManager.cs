@@ -15,10 +15,8 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        // Charger le meilleur score
         bestScore = PlayerPrefs.GetInt("BestScore", 0);
 
-        // S'abonner aux événements
         Health.OnHealthUpdated += OnHealthUpdated;
         MinigameManager.OnMinigameEnded += OnMinigameEnded;
 
@@ -42,7 +40,6 @@ public class ScoreManager : MonoBehaviour
 
     private void OnHealthUpdated(int health)
     {
-        // Sauvegarder le score final quand la santé atteint 0
         if (health <= 0)
         {
             SaveFinalScore();
@@ -59,7 +56,6 @@ public class ScoreManager : MonoBehaviour
 
     private void SaveFinalScore()
     {
-        // Vérifier si c'est un nouveau record
         if (currentScore > bestScore)
         {
             bestScore = currentScore;
@@ -68,7 +64,6 @@ public class ScoreManager : MonoBehaviour
 
             Debug.Log($" NOUVEAU RECORD! Score: {currentScore}");
 
-            // Effet visuel pour nouveau record (optionnel)
             if (bestScoreText != null)
             {
                 StartCoroutine(NewRecordAnimation());
@@ -97,13 +92,11 @@ public class ScoreManager : MonoBehaviour
     {
         if (bestScoreText == null) yield break;
 
-        // Animation de pulsation pour nouveau record
         Vector3 originalScale = bestScoreText.transform.localScale;
         Color originalColor = bestScoreText.color;
 
         for (int i = 0; i < 3; i++)
         {
-            // Grossir + couleur dorée
             float duration = 0.3f;
             float elapsed = 0f;
 
@@ -118,7 +111,6 @@ public class ScoreManager : MonoBehaviour
                 yield return null;
             }
 
-            // Revenir à la normale
             elapsed = 0f;
             while (elapsed < duration)
             {
@@ -136,7 +128,6 @@ public class ScoreManager : MonoBehaviour
         bestScoreText.color = originalColor;
     }
 
-    // Méthodes publiques utiles
     public int GetCurrentScore() => currentScore;
     public int GetBestScore() => bestScore;
 

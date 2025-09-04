@@ -6,7 +6,6 @@ public class Health : MonoBehaviour
     [SerializeField] private int maxHealth = 3;
     private int health;
 
-    // Unifie l'événement pour être compatible avec ScoreManager et GameManager
     public static event Action<int> OnHealthUpdated;
 
     void Start()

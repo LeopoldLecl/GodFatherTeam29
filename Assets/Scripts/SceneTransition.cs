@@ -6,68 +6,66 @@ using System.Collections;
 public class SceneTransition : MonoBehaviour
 {
     [Header("Transition Settings")]
-    [SerializeField] private Image fadeImage;
-    [SerializeField] private float fadeDuration = 1f;
+    [SerializeField] private Image fadeImage;                          
+    [SerializeField] private float fadeDuration = 0.8f;
     [SerializeField] private AnimationCurve fadeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     private static SceneTransition instance;
     public static SceneTransition Instance => instance;
 
-    void Awake()
+    private void Awake()
     {
-        // Singleton pattern
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
         }
-
         instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // S'assurer que l'image de fade existe
         if (fadeImage == null)
-        {
             CreateFadeImage();
-        }
 
-        // Commencer avec un écran noir puis faire un fade in
         if (fadeImage != null)
         {
-            fadeImage.color = Color.black;
+            SetAlpha(1f);
             StartCoroutine(FadeIn());
         }
     }
 
     private void CreateFadeImage()
     {
-        // Créer un Canvas pour le fade si nécessaire
-        GameObject canvasGO = new GameObject("TransitionCanvas");
-        Canvas canvas = canvasGO.AddComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 1000; // Au-dessus de tout
+        var canvasGO = new GameObject("TransitionCanvas");
+        canvasGO.transform.SetParent(transform, false);
 
-        CanvasScaler scaler = canvasGO.AddComponent<CanvasScaler>();
+        var canvas = canvasGO.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 10000; 
+        var scaler = canvasGO.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080);
 
         canvasGO.AddComponent<GraphicRaycaster>();
 
-        // Créer l'image de fade
-        GameObject fadeGO = new GameObject("FadeImage");
+        var fadeGO = new GameObject("FadeImage");
         fadeGO.transform.SetParent(canvasGO.transform, false);
 
         fadeImage = fadeGO.AddComponent<Image>();
         fadeImage.color = Color.black;
+        fadeImage.raycastTarget = false;
 
-        // Faire en sorte qu'elle couvre tout l'écran
-        RectTransform rectTransform = fadeImage.GetComponent<RectTransform>();
-        rectTransform.anchorMin = Vector2.zero;
-        rectTransform.anchorMax = Vector2.one;
-        rectTransform.sizeDelta = Vector2.zero;
-        rectTransform.anchoredPosition = Vector2.zero;
+        var rt = fadeImage.rectTransform;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+    }
 
-        DontDestroyOnLoad(canvasGO);
+    private void SetAlpha(float a)
+    {
+        var c = fadeImage.color;
+        c.a = Mathf.Clamp01(a);
+        fadeImage.color = c;
     }
 
     public void LoadScene(string sceneName)
@@ -75,38 +73,24 @@ public class SceneTransition : MonoBehaviour
         StartCoroutine(LoadSceneWithTransition(sceneName));
     }
 
-    public void LoadScene(int sceneIndex)
+    public void LoadScene(int buildIndex)
     {
-        StartCoroutine(LoadSceneWithTransition(sceneIndex));
+        StartCoroutine(LoadSceneWithTransition(buildIndex));
     }
 
     private IEnumerator LoadSceneWithTransition(string sceneName)
     {
-        // Fade out
         yield return StartCoroutine(FadeOut());
-
-        // Charger la scène
         SceneManager.LoadScene(sceneName);
-
-        // Attendre un frame
-        yield return null;
-
-        // Fade in
+        yield return null; 
         yield return StartCoroutine(FadeIn());
     }
 
-    private IEnumerator LoadSceneWithTransition(int sceneIndex)
+    private IEnumerator LoadSceneWithTransition(int buildIndex)
     {
-        // Fade out
         yield return StartCoroutine(FadeOut());
-
-        // Charger la scène
-        SceneManager.LoadScene(sceneIndex);
-
-        // Attendre un frame
+        SceneManager.LoadScene(buildIndex);
         yield return null;
-
-        // Fade in
         yield return StartCoroutine(FadeIn());
     }
 
@@ -115,24 +99,24 @@ public class SceneTransition : MonoBehaviour
         if (fadeImage == null) yield break;
 
         float elapsed = 0f;
-        Color startColor = fadeImage.color;
+        var startColor = fadeImage.color;
 
         while (elapsed < fadeDuration)
         {
-            elapsed += Time.unscaledDeltaTime;
-            float normalizedTime = elapsed / fadeDuration;
-            float curveValue = fadeCurve.Evaluate(normalizedTime);
+            elapsed += Time.unscaledDeltaTime; 
+            float t = Mathf.Clamp01(elapsed / fadeDuration);
+            float a = fadeCurve.Evaluate(t);
 
-            Color newColor = startColor;
-            newColor.a = curveValue;
-            fadeImage.color = newColor;
+            var c = startColor;
+            c.a = a;
+            fadeImage.color = c;
 
             yield return null;
         }
 
-        Color finalColor = startColor;
-        finalColor.a = 1f;
-        fadeImage.color = finalColor;
+        var fc = startColor;
+        fc.a = 1f;
+        fadeImage.color = fc;
     }
 
     private IEnumerator FadeIn()
@@ -140,23 +124,23 @@ public class SceneTransition : MonoBehaviour
         if (fadeImage == null) yield break;
 
         float elapsed = 0f;
-        Color startColor = fadeImage.color;
+        var startColor = fadeImage.color;
 
         while (elapsed < fadeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
-            float normalizedTime = elapsed / fadeDuration;
-            float curveValue = fadeCurve.Evaluate(1f - normalizedTime);
+            float t = Mathf.Clamp01(elapsed / fadeDuration);
+            float a = fadeCurve.Evaluate(1f - t);
 
-            Color newColor = startColor;
-            newColor.a = curveValue;
-            fadeImage.color = newColor;
+            var c = startColor;
+            c.a = a;
+            fadeImage.color = c;
 
             yield return null;
         }
 
-        Color finalColor = startColor;
-        finalColor.a = 0f;
-        fadeImage.color = finalColor;
+        var fc = startColor;
+        fc.a = 0f;
+        fadeImage.color = fc;
     }
 }
