@@ -220,17 +220,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "c3d4690d-aa2f-47c7-8776-7beede73186a",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Bail",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "1D Axis",
                     "id": "e95384bc-cbc7-457f-9288-2170bfb9755e",
                     "path": "1DAxis",

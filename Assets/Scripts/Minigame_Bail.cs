@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using DG.Tweening;
 
 enum Direction
 {
@@ -34,13 +35,6 @@ public class Minigame_Bail : Minigame
     public static event Action onGoodKeyPressed;
 
     Direction currentDirection = Direction.RIGHT;
-
-#if UNITY_EDITOR
-    public void Start()
-    {
-        Init();
-    }
-#endif
 
     public override void Init()
     {
@@ -78,7 +72,6 @@ public class Minigame_Bail : Minigame
     private void OnKeyPressed(InputAction.CallbackContext ctx)
     {
         float intDirection = ctx.ReadValue<float>();
-
         if (currentDirection != (Direction)intDirection)
         {
             onGoodKeyPressed.Invoke();
@@ -90,13 +83,13 @@ public class Minigame_Bail : Minigame
     {
         if (Direction.LEFT == direction)
         {
-            rightIcon.transform.localScale = new Vector3(1.5f, 1.5f);
-            leftIcon.transform.localScale = new Vector3(1f, 1f);
+            rightIcon.transform.DOScale(1.5f, 1f).SetEase(Ease.OutElastic);
+            leftIcon.transform.DOScale(1f, 1f).SetEase(Ease.OutBounce);
         }
         else
         {
-            rightIcon.transform.localScale = new Vector3(1f, 1f);
-            leftIcon.transform.localScale = new Vector3(1.5f, 1.5f);
+            rightIcon.transform.DOScale(1f, 1f).SetEase(Ease.OutBounce);
+            leftIcon.transform.DOScale(1.5f, 1f).SetEase(Ease.OutElastic);
         }
     }
 
@@ -112,8 +105,8 @@ public class Minigame_Bail : Minigame
         {
             currentDirection = Direction.LEFT;
         }
-
         pointSlider.value = (float)actualPress / (float)pressToWin;
+
         if (actualPress >= pressToWin)
         {
             Debug.Log("gg");
