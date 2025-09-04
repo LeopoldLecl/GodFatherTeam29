@@ -65,7 +65,6 @@ public class Minigame_Bail : Minigame
         if (actualCountdownTime <= 0)
         {
             IAClick.action.started -= OnKeyPressed; // Should be cleared when parent minigame end
-            Debug.Log("failed");
             CompleteMinigame(false);
         }
     }
@@ -110,7 +109,6 @@ public class Minigame_Bail : Minigame
 
         if (actualPress >= pressToWin)
         {
-            Debug.Log("gg");
             IAClick.action.started -= OnKeyPressed;
             CompleteMinigame(true);
         }

@@ -27,6 +27,15 @@ public class Minigame : MonoBehaviour
         {
             isGameActive = false;
             OnMinigameCompleted?.Invoke(success);
+
+            if (success)
+            {
+                Debug.Log("success");
+            }
+            else
+            {
+                Debug.Log("fail");
+            }
         }
     }
 }

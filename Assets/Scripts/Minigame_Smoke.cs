@@ -40,10 +40,10 @@ public class Minigame_Smoke : Minigame
 
         actualCountdownTime = maxCountdownTime;
         timeSlider.value = 1;
+        particleSystem.Simulate(4f);
         particleSystem.Play();
         SmokeTarget.onTargetClicked += () =>
         {
-            Debug.Log("gg");
             CompleteMinigame(true);
         };
     }
@@ -66,7 +66,6 @@ public class Minigame_Smoke : Minigame
         timeSlider.value = actualCountdownTime / maxCountdownTime;
         if (actualCountdownTime <= 0)
         {
-            Debug.Log("failed");
             CompleteMinigame(false);
         }
     }
@@ -75,7 +74,7 @@ public class Minigame_Smoke : Minigame
     {
         base.Clear();
 
-        if (!target)
+        if (target)
         {
             Destroy(target);
         }
