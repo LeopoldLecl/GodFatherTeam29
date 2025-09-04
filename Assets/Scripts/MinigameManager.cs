@@ -14,7 +14,8 @@ public class MinigameManager : MonoBehaviour
     private List<Minigame> minigames = new();
 
     [SerializeField]
-    private InputActionReference IANextMinigame;
+    private float gameTimer;
+    private float currentGameTimer;
 
     private Minigame currentMinigame;
     private int currentIndex = 0;
@@ -24,9 +25,9 @@ public class MinigameManager : MonoBehaviour
 
     void Start()
     {
-        IANextMinigame.action.started += LoadNextMinigame;
-
         Minigame.OnMinigameCompleted += OnMinigameCompleted;
+
+        currentGameTimer = gameTimer;
 
         foreach (Minigame minigame in minigames)
         {
@@ -34,6 +35,20 @@ public class MinigameManager : MonoBehaviour
         }
 
         InitFirstMinigame();
+    }
+
+    private void Update()
+    {
+        if (!health.IsGameRunning())
+        {
+            return;
+        }
+ 
+        currentGameTimer -= Time.deltaTime;
+        if (currentGameTimer <= 0)
+        {
+            FindFirstObjectByType<Health>().SetHealth(0);
+        }
     }
 
     void OnDestroy()
@@ -45,13 +60,12 @@ public class MinigameManager : MonoBehaviour
     {
         currentMinigame = minigames[currentIndex];
         currentMinigame.Init();
-        currentMinigame.gameObject.SetActive(true);
         waitingForMinigameResult = true;
     }
 
-    void LoadNextMinigame(InputAction.CallbackContext ctx)
+    void LoadNextMinigame()
     {
-        if (health.health <= 0)
+        if (!health.IsGameRunning())
         {
             return;
         }
@@ -66,13 +80,12 @@ public class MinigameManager : MonoBehaviour
             currentIndex = 0;
         }
 
-        currentMinigame.gameObject.SetActive(false);
-        currentMinigame.Clear();
+        currentMinigame.Clear(); // Clear directly when minigame end? 
+        /// <see cref="Minigame.CompleteMinigame(bool)"/>
 
         currentMinigame = minigames[currentIndex];
 
         currentMinigame.Init();
-        currentMinigame.gameObject.SetActive(true);
         waitingForMinigameResult = true;
     }
 
@@ -83,15 +96,15 @@ public class MinigameManager : MonoBehaviour
             waitingForMinigameResult = false;
             OnMinigameEnded?.Invoke(success);
 
-             Invoke("AutoLoadNextMinigame", 2f);
+            Invoke("AutoLoadNextMinigame", 2f);
         }
     }
 
     private void AutoLoadNextMinigame()
     {
-        if (health.health > 0)
+        if (health.IsGameRunning())
         {
-            LoadNextMinigame(new InputAction.CallbackContext());
+            LoadNextMinigame();
         }
     }
 }

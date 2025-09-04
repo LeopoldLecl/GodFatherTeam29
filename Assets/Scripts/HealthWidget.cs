@@ -16,8 +16,8 @@ public class HealthWidget : MonoBehaviour
         Health.OnHealthUpdated += UpdateOverlayPosition;
     }
 
-    private void UpdateOverlayPosition(int state)
+    private void UpdateOverlayPosition(int currentHealth, int maxHealth)
     {
-        gameObject.transform.position = Vector3.Lerp(basePosition, finalPosition, 1/(state + 1));
+        gameObject.transform.position = Vector3.Lerp(finalPosition, basePosition, (float)currentHealth / maxHealth);
     }
 }

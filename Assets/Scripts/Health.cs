@@ -3,12 +3,17 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int health = 3;
+    [SerializeField]
+    int maxHealth = 3;
 
-    public static event Action<int> OnHealthUpdated;
+    [SerializeField, Tooltip("Read only")]
+    int health = 3;
+
+    public static event Action<int, int> OnHealthUpdated;
 
     void Start()
     {
+        SetHealth(maxHealth);
         MinigameManager.OnMinigameEnded += OnMinigameEnded;
     }
 
@@ -16,15 +21,20 @@ public class Health : MonoBehaviour
     {
         if (!success)
         {
-            Debug.Log("Failed");
-            health--;
+            SetHealth(--health);
             if (health == 0)
             {
-                Debug.Log("womp womp");
+                Debug.Log("Game ended");
             }
-            OnHealthUpdated?.Invoke(health);
             return;
         }
-        Debug.Log("Success");
     }
+
+    public void SetHealth(int newHealth)
+    {
+        health = newHealth;
+        OnHealthUpdated?.Invoke(health, maxHealth);
+    }
+
+    public bool IsGameRunning() => health > 0;
 }

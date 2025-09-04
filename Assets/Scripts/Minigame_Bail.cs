@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using DG.Tweening;
 
 enum Direction
 {
@@ -35,22 +36,17 @@ public class Minigame_Bail : Minigame
 
     Direction currentDirection = Direction.RIGHT;
 
-#if UNITY_EDITOR
-    public void Start()
-    {
-        Init();
-    }
-#endif
-
     public override void Init()
     {
         base.Init();
 
-        IAClick.action.started += UpdateSpam;
+        IAClick.action.started += OnKeyPressed;
         onGoodKeyPressed += OnGoodKeyPressed;
         currentDirection = Direction.RIGHT;
         ActivateIcon(currentDirection);
         actualCountdownTime = maxCountdownTime;
+        pointSlider.value = 0;
+        timeSlider.value = 1;
     }
 
     private void Update()
@@ -67,26 +63,17 @@ public class Minigame_Bail : Minigame
         timeSlider.value = actualCountdownTime / maxCountdownTime;
         if (actualCountdownTime <= 0)
         {
-            Debug.Log("win");
+            IAClick.action.started -= OnKeyPressed; // Should be cleared when parent minigame end
+            Debug.Log("failed");
             CompleteMinigame(false);
         }
     }
 
-    private void UpdateSpam(InputAction.CallbackContext ctx)
+    private void OnKeyPressed(InputAction.CallbackContext ctx)
     {
         float intDirection = ctx.ReadValue<float>();
-
         if (currentDirection != (Direction)intDirection)
         {
-            if (Direction.LEFT == currentDirection)
-            {
-                currentDirection = Direction.RIGHT;
-            }
-            else
-            {
-                currentDirection = Direction.LEFT; 
-            }
-
             onGoodKeyPressed.Invoke();
             ActivateIcon(currentDirection);
         }
@@ -96,23 +83,34 @@ public class Minigame_Bail : Minigame
     {
         if (Direction.LEFT == direction)
         {
-            rightIcon.transform.localScale = new Vector3(1.5f, 1.5f);
-            leftIcon.transform.localScale = new Vector3(1f, 1f);
+            rightIcon.transform.DOScale(1.5f, 1f).SetEase(Ease.OutElastic);
+            leftIcon.transform.DOScale(1f, 1f).SetEase(Ease.OutBounce);
         }
         else
         {
-            rightIcon.transform.localScale = new Vector3(1f, 1f);
-            leftIcon.transform.localScale = new Vector3(1.5f, 1.5f);
+            rightIcon.transform.DOScale(1f, 1f).SetEase(Ease.OutBounce);
+            leftIcon.transform.DOScale(1.5f, 1f).SetEase(Ease.OutElastic);
         }
     }
 
     private void OnGoodKeyPressed()
     {
         actualPress++;
+
+        if (Direction.LEFT == currentDirection)
+        {
+            currentDirection = Direction.RIGHT;
+        }
+        else
+        {
+            currentDirection = Direction.LEFT;
+        }
         pointSlider.value = (float)actualPress / (float)pressToWin;
+
         if (actualPress >= pressToWin)
         {
             Debug.Log("gg");
+            IAClick.action.started -= OnKeyPressed;
             CompleteMinigame(true);
         }
     }
@@ -121,6 +119,6 @@ public class Minigame_Bail : Minigame
     {
         base.Clear();
 
-        IAClick.action.RemoveAction();
+        IAClick.action.started -= OnKeyPressed;
     }
 }

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 227b490879897294ab7f3bf730ca9945
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - IA_Win: {fileID: -8512874978505531067, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  - IA_Fail: {fileID: -5547471001941247684, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
