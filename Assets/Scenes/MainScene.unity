@@ -1160,6 +1160,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 213890194856489758, guid: 8d9c6cbf07b60324fbf584c74e17a593, type: 3}
+      propertyPath: m_text
+      value: Ecrivez la phrase...
+      objectReference: {fileID: 0}
     - target: {fileID: 237982423664278734, guid: 8d9c6cbf07b60324fbf584c74e17a593, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.42509764
