@@ -28,14 +28,14 @@ public class HealthWidget : MonoBehaviour
 
         Sequence xTransformSequence = DOTween.Sequence();
         xTransformSequence
-            .Append(transform.DOLocalMoveX(0.5f, 1f).SetEase(Ease.InOutSine))
-            .Append(transform.DOLocalMoveX(-0.5f, 1f).SetEase(Ease.InOutSine))
+            .Append(transform.DOLocalMoveX(0.5f, 2.4f).SetEase(Ease.InOutSine))
+            .Append(transform.DOLocalMoveX(-0.5f, 2.4f).SetEase(Ease.InOutSine))
             .SetLoops(-1);
 
         Sequence rotateSequence = DOTween.Sequence();
         rotateSequence
-            .Append(transform.DORotate(new Vector3(0, 0, 3), 1f).SetEase(Ease.InOutSine))
-            .Append(transform.DORotate(new Vector3(0, 0, -3), 1f).SetEase(Ease.InOutSine))
+            .Append(transform.DORotate(new Vector3(0, 0, 3), 1.4f).SetEase(Ease.InOutSine))
+            .Append(transform.DORotate(new Vector3(0, 0, -3), 1.4f).SetEase(Ease.InOutSine))
             .SetLoops(-1);
 
         yTransformSequence.Play();

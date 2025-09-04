@@ -1,11 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Minigame_Smoke : Minigame
 {
-    [SerializeField]
-    Camera cam;
+    private Camera cam;
 
     [SerializeField]
     GameObject mask;
@@ -14,7 +14,14 @@ public class Minigame_Smoke : Minigame
     Slider timeSlider;
 
     [SerializeField]
-    SmokeTarget toFind;
+    GameObject targetPrefab;
+    private GameObject target;
+
+    [SerializeField]
+    List<GameObject> spawnpoints;
+
+    [SerializeField]
+    ParticleSystem particleSystem;
 
     [SerializeField]
     float maxCountdownTime = 5f;
@@ -29,7 +36,11 @@ public class Minigame_Smoke : Minigame
     {
         base.Init();
 
+        target = Instantiate(targetPrefab, spawnpoints[Random.Range(0, spawnpoints.Count)].transform);
+
         actualCountdownTime = maxCountdownTime;
+        timeSlider.value = 1;
+        particleSystem.Play();
         SmokeTarget.onTargetClicked += () =>
         {
             Debug.Log("gg");
@@ -39,7 +50,7 @@ public class Minigame_Smoke : Minigame
 
     void Update()
     {
-        if (true)
+        if (isGameActive)
         {
             Vector3 pos = cam.ScreenToWorldPoint(Input.mousePosition);
             pos.z = 0;
@@ -64,5 +75,12 @@ public class Minigame_Smoke : Minigame
     {
         base.Clear();
 
+        if (!target)
+        {
+            Destroy(target);
+        }
+
+        particleSystem?.Pause();
+        particleSystem?.Clear();
     }
 }

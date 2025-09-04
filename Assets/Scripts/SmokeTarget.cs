@@ -2,11 +2,12 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SmokeTarget : MonoBehaviour, IPointerDownHandler
+public class SmokeTarget : MonoBehaviour
 {
     public static event Action onTargetClicked;
-    public void OnPointerDown(PointerEventData eventData)
+
+    public void OnMouseDown()
     {
-        onTargetClicked.Invoke();
+        onTargetClicked?.Invoke();
     }
 }

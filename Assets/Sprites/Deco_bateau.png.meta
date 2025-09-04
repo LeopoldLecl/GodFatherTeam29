@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Deco_bateau_0: 7960445446872694266
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
