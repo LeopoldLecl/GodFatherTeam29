@@ -14,9 +14,6 @@ public class MinigameManager : MonoBehaviour
     private List<Minigame> minigames = new();
 
     [SerializeField]
-    private InputActionReference IANextMinigame;
-
-    [SerializeField]
     private float gameTimer;
     private float currentGameTimer;
 
@@ -28,7 +25,6 @@ public class MinigameManager : MonoBehaviour
 
     void Start()
     {
-        IANextMinigame.action.started += LoadNextMinigame;
         Minigame.OnMinigameCompleted += OnMinigameCompleted;
 
         currentGameTimer = gameTimer;
@@ -67,7 +63,7 @@ public class MinigameManager : MonoBehaviour
         waitingForMinigameResult = true;
     }
 
-    void LoadNextMinigame(InputAction.CallbackContext ctx)
+    void LoadNextMinigame()
     {
         if (!health.IsGameRunning())
         {
@@ -108,7 +104,7 @@ public class MinigameManager : MonoBehaviour
     {
         if (health.IsGameRunning())
         {
-            LoadNextMinigame(new InputAction.CallbackContext());
+            LoadNextMinigame();
         }
     }
 }

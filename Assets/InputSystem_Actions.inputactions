@@ -24,7 +24,16 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "NextMinigame",
+                    "name": "Bail",
+                    "type": "Button",
+                    "id": "f8a882cc-346c-479e-86a8-f75e308eee25",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WonIRLMinigame",
                     "type": "Button",
                     "id": "bf32f080-9aae-4f50-91e0-19d9d034118e",
                     "expectedControlType": "",
@@ -33,9 +42,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Bail",
+                    "name": "FailedIRLMinigame",
                     "type": "Button",
-                    "id": "f8a882cc-346c-479e-86a8-f75e308eee25",
+                    "id": "741ba001-f51d-482a-9135-b128237caa4a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -211,11 +220,11 @@
                 {
                     "name": "",
                     "id": "68b0061e-fb54-43df-968c-518b1ff305b8",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NextMinigame",
+                    "action": "WonIRLMinigame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -251,6 +260,17 @@
                     "action": "Bail",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "d3840283-2433-4ded-ac83-2b1a6e591ec0",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FailedIRLMinigame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
