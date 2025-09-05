@@ -27,6 +27,10 @@ public class Minigame_Smoke : Minigame
     float maxCountdownTime = 5f;
     float actualCountdownTime;
 
+
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip smokeSound;
+
     void Start()
     {
         cam = FindFirstObjectByType<Camera>();
@@ -42,6 +46,7 @@ public class Minigame_Smoke : Minigame
         timeSlider.value = 1;
         particleSystem.Simulate(4f);
         particleSystem.Play();
+        audioSource.PlayOneShot(smokeSound);
         SmokeTarget.onTargetClicked += () =>
         {
             CompleteMinigame(true);

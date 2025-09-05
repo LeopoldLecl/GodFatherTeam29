@@ -20,11 +20,11 @@ public class MiniGame_WordFill : Minigame
     [SerializeField]
     private List<Color> phraseColors = new List<Color>
     {
-        Color.red,     
-        Color.blue,     
-        Color.green,    
-        Color.yellow,   
-        Color.magenta   
+        Color.red,
+        Color.blue,
+        Color.green,
+        Color.yellow,
+        Color.magenta
     };
 
     [Header("Phrases")]
@@ -36,13 +36,21 @@ public class MiniGame_WordFill : Minigame
         "la vague lave le quai",
         "la moule mord le mât",
         "la seiche sèche"
-
     };
+
+    [Header("Typing SFX")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private List<AudioClip> typingClips = new List<AudioClip>();
+    [SerializeField] private List<AudioClip> captainTalk = new List<AudioClip>();
+    [SerializeField, Range(0.5f, 2f)] private float minPitch = 0.95f;
+    [SerializeField, Range(0.5f, 2f)] private float maxPitch = 1.05f;
 
     private string currentTargetPhrase;
     private int currentPhraseIndex;
     private float timer;
     private bool hasValidated = false;
+
+    private int lastInputLength = 0;
 
     public override void Init()
     {
@@ -55,7 +63,8 @@ public class MiniGame_WordFill : Minigame
         currentTargetPhrase = possiblePhrases[currentPhraseIndex];
 
         SetupUI();
-
+        AudioClip playedClip = captainTalk[Random.Range(0, captainTalk.Count)];
+        audioSource.PlayOneShot(playedClip);
         Debug.Log($"Couleur affichée correspond à : {currentTargetPhrase}");
     }
 
@@ -65,6 +74,9 @@ public class MiniGame_WordFill : Minigame
 
         if (inputField != null)
         {
+            inputField.onSubmit.RemoveListener(OnSubmit);
+            inputField.onValueChanged.RemoveListener(OnInputChanged);
+
             inputField.text = "";
             inputField.interactable = false;
         }
@@ -79,11 +91,19 @@ public class MiniGame_WordFill : Minigame
 
         if (inputField != null)
         {
+            // Préparer l'input sans déclencher de SFX
+            inputField.onSubmit.RemoveListener(OnSubmit);
+            inputField.onValueChanged.RemoveListener(OnInputChanged);
+
             inputField.text = "";
+            lastInputLength = 0;
+
             inputField.interactable = true;
             inputField.Select();
             inputField.ActivateInputField();
+
             inputField.onSubmit.AddListener(OnSubmit);
+            inputField.onValueChanged.AddListener(OnInputChanged);
         }
     }
 
@@ -150,11 +170,38 @@ public class MiniGame_WordFill : Minigame
         return processedInput.Equals(processedTarget);
     }
 
+    private void OnInputChanged(string newValue)
+    {
+        if (!isGameActive) { lastInputLength = newValue?.Length ?? 0; return; }
+        if (string.IsNullOrEmpty(newValue))
+        {
+            lastInputLength = 0;
+            return;
+        }
+
+        int newLen = newValue.Length;
+
+        if (newLen > lastInputLength)
+        {
+            char lastChar = newValue[newLen - 1];
+
+            if (char.IsLetter(lastChar) && audioSource != null && typingClips != null && typingClips.Count > 0)
+            {
+                var clip = typingClips[Random.Range(0, typingClips.Count)];
+                audioSource.pitch = Random.Range(minPitch, maxPitch);
+                audioSource.PlayOneShot(clip);
+            }
+        }
+
+        lastInputLength = newLen;
+    }
+
     void OnDestroy()
     {
         if (inputField != null)
         {
             inputField.onSubmit.RemoveListener(OnSubmit);
+            inputField.onValueChanged.RemoveListener(OnInputChanged);
         }
     }
 }
