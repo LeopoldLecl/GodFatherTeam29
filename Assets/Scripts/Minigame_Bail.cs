@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using DG.Tweening;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 enum Direction
 {
@@ -23,6 +25,9 @@ public class Minigame_Bail : Minigame
     Slider timeSlider;
     [SerializeField]
     Slider pointSlider;
+
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] List<AudioClip> rameSound = new List<AudioClip>();
 
     [SerializeField]
     int pressToWin = 10;
@@ -75,6 +80,8 @@ public class Minigame_Bail : Minigame
         if (currentDirection != (Direction)intDirection)
         {
             onGoodKeyPressed.Invoke();
+            AudioClip playedClip = rameSound[UnityEngine.Random.Range(0, rameSound.Count)];
+            audioSource.PlayOneShot(playedClip);
             ActivateIcon(currentDirection);
         }
     }
