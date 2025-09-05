@@ -10,6 +10,7 @@ public class MiniGame_ScreenClean : Minigame
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private ParticleSystem clickParticles;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private Slider timerSlider;
 
     [Header("Game Settings")]
     [SerializeField] private float timeLimit = 10f;
@@ -145,6 +146,8 @@ public class MiniGame_ScreenClean : Minigame
     {
         if (timerText != null)
             timerText.text = $"Temps: {Mathf.Max(0f, timer):F1}s";
+        if (timerSlider != null)
+            timerSlider.value = timer / timeLimit;
     }
 
     private void OnImageClicked()
