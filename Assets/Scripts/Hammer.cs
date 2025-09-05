@@ -24,7 +24,6 @@ public class Hammer : MonoBehaviour
     private void Start()
     {
         cam = FindFirstObjectByType<Camera>();
-        Reset();
         IAClick.action.started += (ctx) => { ShowClickMark(true); };
         IAClick.action.canceled += (ctx) => { ShowClickMark(false); };
     }
