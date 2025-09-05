@@ -26,6 +26,9 @@ public class Minigame_Repair : Minigame
 
     [SerializeField] Hammer hammer;
 
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip hammerSound;
+
     public override void Init()
     {
         base.Init();
@@ -33,6 +36,7 @@ public class Minigame_Repair : Minigame
         holeFixed = 0;
         pointSlider.value = 0;
         actualHoleTimer = 0;
+        audioSource.PlayOneShot(hammerSound);
         holeCount = 0;
         availableHoleSpawnpoints = new(holeSpawnpoints);
         hammer.Activate();

@@ -347,7 +347,16 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Deco_telephoen_0: -4249035641834167446
+      Deco_telephoen_1: -2172696650247800196
+      Deco_telephoen_2: -5073048487626657801
+      Deco_telephoen_3: 8508276841676924079
+      Deco_telephoen_4: 7216291830129794892
+      Deco_telephoen_5: 6979618195688857437
+      Deco_telephoen_6: -7131061165421001860
+      Deco_telephoen_7: 6800671438190239565
+      Deco_telephoen_8: -7912961713589573759
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
