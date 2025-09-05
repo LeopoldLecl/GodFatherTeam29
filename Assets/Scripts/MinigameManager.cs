@@ -21,6 +21,10 @@ public class MinigameManager : MonoBehaviour
     private int currentIndex = 0;
     private bool waitingForMinigameResult = false;
 
+    [SerializeField] GameObject pivotPhare;
+    [SerializeField] Vector3 endScale;
+    [SerializeField] Vector3 startScale;
+
     public static event Action<bool> OnMinigameEnded;
 
     void Start()
@@ -45,6 +49,8 @@ public class MinigameManager : MonoBehaviour
         }
  
         currentGameTimer -= Time.deltaTime;
+        pivotPhare.transform.localScale = Vector3.Lerp(endScale, startScale, currentGameTimer / gameTimer);
+
         if (currentGameTimer <= 0)
         {
             FindFirstObjectByType<Health>().SetHealth(0);

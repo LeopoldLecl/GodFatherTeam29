@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e5ef5ad02a4023149b93574fe1440cfb
+guid: d4fcec4b07d8a5d47819c04c970d1bc5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2632275222761218068
-    second: Deco_marteau_02_0
+      213: 9170217867523284029
+    second: bg_barre_pt_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Deco_marteau_02_0
+      name: bg_barre_pt_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 201
-        height: 174
+        width: 975
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 410aeb36e58b78420800000000000000
-      internalID: 2632275222761218068
+      spriteID: d3c5aaa8098234f70800000000000000
+      internalID: 9170217867523284029
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Deco_marteau_02_0: 2632275222761218068
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

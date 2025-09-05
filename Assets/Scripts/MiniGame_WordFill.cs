@@ -10,6 +10,8 @@ public class MiniGame_WordFill : Minigame
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private TextMeshProUGUI timerText;
 
+    [SerializeField] private Slider timerSlider;
+
     [Header("Game Settings")]
     [SerializeField] private float timeLimit = 15f;
     [SerializeField] private bool caseSensitive = false;
@@ -95,6 +97,8 @@ public class MiniGame_WordFill : Minigame
         {
             timerText.text = $"Temps restant : {timer:F1}s";
         }
+
+        timerSlider.value = timer / timeLimit;
 
         if (timer <= 0 && !hasValidated)
         {
