@@ -7,16 +7,12 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class HealthWidget : MonoBehaviour
 {
-    [SerializeField]
-    Vector3 basePosition;
+    [SerializeField] private Vector3 basePosition;
+    [SerializeField] private Vector3 finalPosition;
+    [SerializeField] private int maxHealth = 3;
+    [SerializeField] private GameObject pivot;
 
-    [SerializeField]
-    Vector3 finalPosition;
-
-    [SerializeField]
-    GameObject pivot;
-
-    void Start()
+    void OnEnable()
     {
         Health.OnHealthUpdated += UpdateOverlayPosition;
 
@@ -41,10 +37,19 @@ public class HealthWidget : MonoBehaviour
         yTransformSequence.Play();
         xTransformSequence.Play();
         rotateSequence.Play();
+
+        UpdateOverlayPosition(maxHealth);
     }
 
-    private void UpdateOverlayPosition(int currentHealth, int maxHealth)
+    void OnDisable()
     {
+        Health.OnHealthUpdated -= UpdateOverlayPosition;
+        pivot.transform.DOLocalMove(basePosition);
+    }
+
+    private void UpdateOverlayPosition(int currentHealth)
+    {
+        float t = maxHealth > 0 ? Mathf.Clamp01((float)currentHealth / maxHealth) : 0f;
         pivot.transform.DOLocalMove(Vector3.Lerp(finalPosition, basePosition, (float)currentHealth / maxHealth), 1f);
     }
 }
