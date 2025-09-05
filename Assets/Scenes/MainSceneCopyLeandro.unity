@@ -140,7 +140,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 416729083113363075, guid: c7676fa6b1a251d4caad12144e8b2787, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4839518317066401171, guid: c7676fa6b1a251d4caad12144e8b2787, type: 3}
       propertyPath: m_LocalPosition.x
@@ -186,9 +186,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Minigame_Repair
       objectReference: {fileID: 0}
+    - target: {fileID: 6444040411994320482, guid: c7676fa6b1a251d4caad12144e8b2787, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7404223930324682565, guid: c7676fa6b1a251d4caad12144e8b2787, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -243,9 +247,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5238428219064500011, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5238428219064500011, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5238428219064500011, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5238428219064500011, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -130
+      objectReference: {fileID: 0}
+    - target: {fileID: 6706650083530573923, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6706650083530573923, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7739414736601976420, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
       propertyPath: m_Name
       value: Minigame_Smoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 7739414736601976420, guid: 968a9fd6e544cd24a8ea271403acd2b5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -485,6 +517,17 @@ Transform:
   - {fileID: 692642913}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &706762058 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6627039603922930756, guid: a09e11405533b054c871a793d67c8053, type: 3}
+  m_PrefabInstance: {fileID: 4716706774886587606}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 227b490879897294ab7f3bf730ca9945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1019007849
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,6 +746,7 @@ MonoBehaviour:
   - {fileID: 222000384}
   - {fileID: 357479602}
   - {fileID: 1590196469}
+  - {fileID: 706762058}
   gameTimer: 180
   pivotPhare: {fileID: 704162036}
   endScale: {x: 1, y: 1, z: 1}
@@ -1147,6 +1191,63 @@ Transform:
   - {fileID: 1019007850}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4716706774886587606
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3157330440255603534, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978726696230534981, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_Name
+      value: IRLMinigame_Noeud
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a09e11405533b054c871a793d67c8053, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1154,11 +1255,12 @@ SceneRoots:
   - {fileID: 1917031506}
   - {fileID: 1245438310}
   - {fileID: 2124656042}
+  - {fileID: 252967911}
   - {fileID: 1165877732}
+  - {fileID: 4716706774886587606}
   - {fileID: 1590196468}
   - {fileID: 357479601}
   - {fileID: 1091767954}
   - {fileID: 1928847186}
   - {fileID: 704162037}
   - {fileID: 1875947126}
-  - {fileID: 252967911}
