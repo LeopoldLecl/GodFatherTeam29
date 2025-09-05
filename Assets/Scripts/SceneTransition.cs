@@ -143,4 +143,15 @@ public class SceneTransition : MonoBehaviour
         fc.a = 0f;
         fadeImage.color = fc;
     }
+
+    public System.Collections.IEnumerator FadeOutRoutine()
+    {
+        yield return StartCoroutine(FadeOut());
+    }
+
+    public System.Collections.IEnumerator FadeInRoutine()
+    {
+        yield return StartCoroutine(FadeIn());
+    }
+
 }
