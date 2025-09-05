@@ -65,9 +65,11 @@ public class MinigameManager : MonoBehaviour
     {
         if (!health.IsGameRunning() || waitingForMinigameResult) return;
 
+        currentMinigame = minigames[Random.Range(0, minigames.Count)]; // Choose a mg
+
         if (minigamePool.Count > 0) minigames.Add(minigamePool[0]); // If pool is not empty, add it to main list
         minigamePool.RemoveAt(0);
-        currentMinigame = minigames[Random.Range(0, minigames.Count)]; // Choose a mg
+
         minigamePool.Add(currentMinigame); // Add it to the pool and
         minigames.Remove(currentMinigame); // remove it from the main list
 
