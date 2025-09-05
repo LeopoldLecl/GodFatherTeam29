@@ -24,6 +24,8 @@ public class Minigame_Repair : Minigame
 
     private int holeCount;
 
+    [SerializeField] Hammer hammer;
+
     public override void Init()
     {
         base.Init();
@@ -33,6 +35,7 @@ public class Minigame_Repair : Minigame
         actualHoleTimer = 0;
         holeCount = 0;
         availableHoleSpawnpoints = new(holeSpawnpoints);
+        hammer.Activate();
     }
 
     private void Update()
@@ -86,5 +89,6 @@ public class Minigame_Repair : Minigame
             holeInst.Reset();
         }
         availableHoleSpawnpoints.Clear();
+        hammer.Reset();
     }
 }
