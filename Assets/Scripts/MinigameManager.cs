@@ -23,6 +23,9 @@ public class MinigameManager : MonoBehaviour
 
     public static event Action<bool> OnMinigameEnded;
 
+
+    public AudioSource audioSource;
+    public AudioClip winSound;
     void Start()
     {
         Minigame.OnMinigameCompleted += OnMinigameCompleted;
@@ -77,6 +80,10 @@ public class MinigameManager : MonoBehaviour
         if (!waitingForMinigameResult || inTransition) return;
         waitingForMinigameResult = false;
         OnMinigameEnded?.Invoke(success);
+        if (success)
+        {
+            audioSource.PlayOneShot(winSound);
+        }
         StartCoroutine(TransitionAndLoadNext());
     }
 
