@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Deco_marteau_01_0: 3623319659679462829
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
