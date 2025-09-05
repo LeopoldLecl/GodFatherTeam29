@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Deco_goutte_02_0: 1915514714113179778
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

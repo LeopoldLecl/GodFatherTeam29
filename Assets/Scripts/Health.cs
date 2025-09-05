@@ -6,7 +6,7 @@ public class Health : MonoBehaviour
     [SerializeField] private int maxHealth = 3;
     private int health;
 
-    public static event Action<int> OnHealthUpdated;
+    public static event Action<int, int> OnHealthUpdated;
 
     void Start()
     {
@@ -35,7 +35,7 @@ public class Health : MonoBehaviour
     public void SetHealth(int newHealth)
     {
         health = Mathf.Clamp(newHealth, 0, maxHealth);
-        OnHealthUpdated?.Invoke(health);
+        OnHealthUpdated?.Invoke(health, maxHealth);
 
         if (health <= 0)
         {

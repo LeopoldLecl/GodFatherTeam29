@@ -38,7 +38,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void OnHealthUpdated(int health)
+    private void OnHealthUpdated(int health, int maxHealth)
     {
         if (health <= 0)
         {

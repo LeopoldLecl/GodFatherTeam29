@@ -9,7 +9,6 @@ public class HealthWidget : MonoBehaviour
 {
     [SerializeField] private Vector3 basePosition;
     [SerializeField] private Vector3 finalPosition;
-    [SerializeField] private int maxHealth = 3;
     [SerializeField] private GameObject pivot;
 
     void OnEnable()
@@ -37,17 +36,15 @@ public class HealthWidget : MonoBehaviour
         yTransformSequence.Play();
         xTransformSequence.Play();
         rotateSequence.Play();
-
-        UpdateOverlayPosition(maxHealth);
     }
 
     void OnDisable()
     {
         Health.OnHealthUpdated -= UpdateOverlayPosition;
-        pivot.transform.DOLocalMove(basePosition);
+        pivot.transform.DOLocalMove(basePosition, 1f);
     }
 
-    private void UpdateOverlayPosition(int currentHealth)
+    private void UpdateOverlayPosition(int currentHealth, int maxHealth)
     {
         float t = maxHealth > 0 ? Mathf.Clamp01((float)currentHealth / maxHealth) : 0f;
         pivot.transform.DOLocalMove(Vector3.Lerp(finalPosition, basePosition, (float)currentHealth / maxHealth), 1f);

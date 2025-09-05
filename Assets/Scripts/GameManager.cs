@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         Health.OnHealthUpdated -= OnHealthChanged;
     }
 
-    private void OnHealthChanged(int currentHealth)
+    private void OnHealthChanged(int currentHealth, int maxHealth)
     {
         if (currentHealth <= 0 && !gameOver)
         {
