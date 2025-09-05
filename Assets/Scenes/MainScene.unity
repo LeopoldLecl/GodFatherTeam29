@@ -453,8 +453,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: {fileID: 2124656041}
   minigames:
-  - {fileID: 1577657083}
   - {fileID: 898159551}
+  - {fileID: 1577657083}
   - {fileID: 881381951}
   - {fileID: 646804838}
   - {fileID: 1346029701}

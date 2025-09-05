@@ -19,6 +19,8 @@ public class MinigameManager : MonoBehaviour
     [SerializeField] Vector3 endScale;
     [SerializeField] Vector3 startScale;
 
+    [SerializeField] GameObject winPrefab;
+
     public static event Action<bool> OnMinigameEnded;
 
     void Start()
@@ -34,7 +36,11 @@ public class MinigameManager : MonoBehaviour
         if (!health.IsGameRunning() || inTransition) return;
         currentGameTimer -= Time.deltaTime;
         pivotPhare.transform.localScale = Vector3.Lerp(endScale, startScale, currentGameTimer / gameTimer);
-        if (currentGameTimer <= 0) FindFirstObjectByType<Health>().SetHealth(0);    
+        if (currentGameTimer <= 0)
+        {
+            FindFirstObjectByType<Health>().SetHealth(0);
+            Instantiate(winPrefab);
+        }
     }
 
     void OnDestroy()
