@@ -98,7 +98,10 @@ public class MiniGame_WordFill : Minigame
             timerText.text = $"Temps restant : {timer:F1}s";
         }
 
-        timerSlider.value = timer / timeLimit;
+        if (timerSlider != null)
+        {
+            timerSlider.value = timer / timeLimit;
+        }
 
         if (timer <= 0 && !hasValidated)
         {

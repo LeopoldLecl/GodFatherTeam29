@@ -747,6 +747,7 @@ MonoBehaviour:
   - {fileID: 357479602}
   - {fileID: 1590196469}
   - {fileID: 706762058}
+  minigamePool: []
   gameTimer: 180
   pivotPhare: {fileID: 704162036}
   endScale: {x: 1, y: 1, z: 1}
@@ -1242,6 +1243,10 @@ PrefabInstance:
     - target: {fileID: 4978726696230534981, guid: a09e11405533b054c871a793d67c8053, type: 3}
       propertyPath: m_Name
       value: IRLMinigame_Noeud
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978726696230534981, guid: a09e11405533b054c871a793d67c8053, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

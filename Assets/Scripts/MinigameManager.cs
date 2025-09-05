@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MinigameManager : MonoBehaviour
 {
     [SerializeField] private Health health;
     [SerializeField] private List<Minigame> minigames = new();
+    [SerializeField] private List<Minigame> minigamePool = new();
     [SerializeField] private float gameTimer;
     private float currentGameTimer;
 
     private Minigame currentMinigame;
-    private int currentIndex = 0;
     private bool waitingForMinigameResult = false;
     private bool inTransition = false;
 
@@ -43,7 +44,10 @@ public class MinigameManager : MonoBehaviour
 
     void InitFirstMinigame()
     {
-        currentMinigame = minigames[currentIndex];
+        currentMinigame = minigames[0];
+        minigamePool.Add(currentMinigame); // Add it to the pool and
+        minigames.Remove(currentMinigame); // remove it from the main list
+
         currentMinigame.Init();
         waitingForMinigameResult = true;
     }
@@ -51,8 +55,13 @@ public class MinigameManager : MonoBehaviour
     void LoadNextMinigameImmediate()
     {
         if (!health.IsGameRunning() || waitingForMinigameResult) return;
-        if (++currentIndex > minigames.Count - 1) currentIndex = 0;
-        currentMinigame = minigames[currentIndex];
+
+        if (minigamePool.Count > 0) minigames.Add(minigamePool[0]); // If pool is not empty, add it to main list
+        minigamePool.RemoveAt(0);
+        currentMinigame = minigames[Random.Range(0, minigames.Count)]; // Choose a mg
+        minigamePool.Add(currentMinigame); // Add it to the pool and
+        minigames.Remove(currentMinigame); // remove it from the main list
+
         currentMinigame.Init();
         waitingForMinigameResult = true;
     }
